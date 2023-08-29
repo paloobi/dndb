@@ -11,24 +11,24 @@ const {
 const seedDB = async () => {
     console.log("begin seeding db");
     console.log("creating tables");
-    await createTables();
+    await createTables(client);
     console.log("successfully created tables");
     console.log("create characters");
-    const characters = await getAllCharacters();
+    const characters = await getAllCharacters(client);
     console.log(characters);
-    const joe = await createCharacter("joe", "elf", "paladin");
+    const joe = await createCharacter(client, "joe", "elf", "paladin");
     console.log("created ", joe);    
-    const bo = await createCharacter("bo", "orc", "paladin");
+    const bo = await createCharacter(client, "bo", "orc", "paladin");
     console.log("created ", bo);
-    const charactersAgain = await getAllCharacters();
+    const charactersAgain = await getAllCharacters(client);
     console.log(charactersAgain);
-    const alsoJoe = await getCharacterById(1);
+    const alsoJoe = await getCharacterById(client, 1);
     console.log("got character: ", alsoJoe);
-    const updatedJoe = await updateCharacterById(1, "Bob", "half-orc", "bard");
+    const updatedJoe = await updateCharacterById(client, 1, "Bob", "half-orc", "bard");
     console.log("updated Joe to: ", updatedJoe);
-    await deleteCharacterById(1);
+    await deleteCharacterById(client, 1);
     console.log("successfully deleted");
-    const finalCharacters = await getAllCharacters();
+    const finalCharacters = await getAllCharacters(client);
     console.log(finalCharacters);
     console.log("finished seeding db");
 }
