@@ -13,7 +13,8 @@ client.on("error", (error) => {
 
 const createTables = async (client) => {
     await client.query(`
-        DROP TABLE characters;    
+        DROP TABLE characters;
+        DROP TABLE dms;    
     `)
     await client.query(`
         CREATE TABLE characters(
@@ -22,6 +23,11 @@ const createTables = async (client) => {
             race VARCHAR(80) NOT NULL,
             class VARCHAR(80) NOT NULL
         );
+        CREATE TABLE dms(
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(80) NOT NULL,
+            star_rating INT NOT NULL BETWEEN 0 AND 5
+            );
     `)
 }
 
@@ -29,6 +35,7 @@ const createTables = async (client) => {
 module.exports = {
     client,
     createTables,
-    ...require('./characters')
+    ...require('./characters'),
+    ...require('./dms')
 }
 
