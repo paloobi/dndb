@@ -13,8 +13,8 @@ client.on("error", (error) => {
 
 const createTables = async (client) => {
     await client.query(`
-        DROP TABLE characters;
-        DROP TABLE dms;    
+        DROP TABLE IF EXISTS characters;
+        DROP TABLE IF EXISTS dms;    
     `)
     await client.query(`
         CREATE TABLE characters(
@@ -26,7 +26,7 @@ const createTables = async (client) => {
         CREATE TABLE dms(
             id SERIAL PRIMARY KEY,
             name VARCHAR(80) NOT NULL,
-            star_rating INT NOT NULL BETWEEN 0 AND 5
+            star_rating INT NOT NULL CHECK(star_rating BETWEEN 0 AND 5)
             );
     `)
 }

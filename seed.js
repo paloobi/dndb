@@ -5,14 +5,22 @@ const {
     getAllCharacters,
     getCharacterById,
     updateCharacterById,
-    deleteCharacterById 
+    deleteCharacterById,
+    createDm,
+    getAllDms,
+    getDmById,
+    updateDmById, 
+    deleteDmById 
 } = require(".");
 
 const seedDB = async () => {
+    // *** BEGIN ***
     console.log("begin seeding db");
     console.log("creating tables");
     await createTables(client);
     console.log("successfully created tables");
+
+    // *** SEED CHARACTERS ***
     console.log("create characters");
     const characters = await getAllCharacters(client);
     console.log(characters);
@@ -30,6 +38,27 @@ const seedDB = async () => {
     console.log("successfully deleted");
     const finalCharacters = await getAllCharacters(client);
     console.log(finalCharacters);
+
+    // *** SEED DMS ***
+    console.log("create dms");
+    const dms = await getAllDms(client);
+    console.log(dms);
+    const billyBob = await createDm(client, "Billy Bob", 5);
+    console.log("created ", billyBob);    
+    const samantha = await createDm(client, "Samantha", 4);
+    console.log("created ", samantha);
+    const dmsAgain = await getAllDms(client);
+    console.log(dmsAgain);
+    const alsoBillyBob = await getDmById(client, 1);
+    console.log("got character: ", alsoBillyBob);
+    const updatedBillyBob = await updateDmById(client, 1, "Billy Bob", 3);
+    console.log("updated Billy Bob to: ", updatedBillyBob);
+    await deleteDmById(client, 1);
+    console.log("successfully deleted");
+    const finalDms = await getAllDms(client);
+    console.log(finalDms);
+
+    // *** END ***
     console.log("finished seeding db");
 }
 
