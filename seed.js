@@ -15,7 +15,11 @@ const {
     getAllCampaigns,
     getCampaignById,
     updateCampaignById,
-    deleteCampaignById 
+    deleteCampaignById,
+    getCampaignsByCharacterId,
+    getCharactersByCampaignId,
+    addCharacterToCampaign,
+    removeCharacterFromCampaign
 } = require(".");
 
 const seedDB = async () => {
@@ -33,6 +37,8 @@ const seedDB = async () => {
     console.log("created ", joe);    
     const bo = await createCharacter(client, "bo", "orc", "paladin");
     console.log("created ", bo);
+    const flo = await createCharacter(client, "flo", "human", "rogue");
+    console.log("created ", flo);
     const charactersAgain = await getAllCharacters(client);
     console.log(charactersAgain);
     const alsoJoe = await getCharacterById(client, 1);
@@ -72,6 +78,8 @@ const seedDB = async () => {
     console.log("created ", bridgeToNowhere);    
     const dungeonWithStuff = await createCampaign(client, "A Dungeon with Stuff", samantha.id);
     console.log("created ", dungeonWithStuff);
+    const castleWithLoot = await createCampaign(client, "Castle with Loot", samantha.id);
+    console.log("created ", dungeonWithStuff);
     const campaignsAgain = await getAllCampaigns(client);
     console.log(campaignsAgain);
     const alsoBridgeToNowhere = await getCampaignById(client, 1);
@@ -82,6 +90,21 @@ const seedDB = async () => {
     console.log("successfully deleted");
     const finalCampaigns = await getAllCampaigns(client);
     console.log(finalCampaigns);
+
+    // *** ADD CHARACTERS TO CAMPAIGN ***
+    await addCharacterToCampaign(client, dungeonWithStuff.id, bo.id);
+    await addCharacterToCampaign(client, castleWithLoot.id, bo.id);
+    await addCharacterToCampaign(client, castleWithLoot.id, flo.id);
+
+    const bosCampaigns = await getCampaignsByCharacterId(client, bo.id);
+    console.log("bosCampaigns: ", bosCampaigns);
+    const castleWithLootCharacters = await getCharactersByCampaignId(client, castleWithLoot.id);
+    console.log("castleWithLootCharacters", castleWithLootCharacters);
+
+    await removeCharacterFromCampaign(client, castleWithLoot.id, flo.id);
+
+    const castleWithLootCharactersUpdated = await getCharactersByCampaignId(client, castleWithLoot.id);
+    console.log("castleWithLootCharactersUpdate", castleWithLootCharactersUpdated);
 
     // *** END ***
     console.log("finished seeding db");

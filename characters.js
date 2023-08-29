@@ -37,6 +37,17 @@ const getCharacterById = async (client, id) => {
     return character;
 }
 
+const getCampaignsByCharacterId = async (client, characterId) => {
+    const {rows: campaigns} = await client.query(`
+        SELECT campaigns.* 
+        FROM campaigns 
+        JOIN campaigns_characters 
+        ON campaigns_characters.campaign_id = campaigns.id
+        WHERE campaigns_characters.character_id = $1
+    `, [characterId]);
+    return campaigns;
+}
+
 const deleteCharacterById = async (client, id) => {
     const {rows: [character]} = await client.query(`
         DELETE FROM characters
@@ -51,4 +62,5 @@ module.exports = {
     getAllCharacters,
     getCharacterById,
     deleteCharacterById,
+    getCampaignsByCharacterId
 }

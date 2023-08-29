@@ -10,6 +10,7 @@ client.on("error", (error) => {
 
 const createTables = async (client) => {
     await client.query(`
+        DROP TABLE IF EXISTS campaigns_characters;
         DROP TABLE IF EXISTS characters;
         DROP TABLE IF EXISTS campaigns;
         DROP TABLE IF EXISTS dms;    
@@ -31,15 +32,20 @@ const createTables = async (client) => {
             name VARCHAR(80) NOT NULL,
             dm_id INT REFERENCES dms(id)
             );
+        CREATE TABLE campaigns_characters(
+            id SERIAL PRIMARY KEY,
+            campaign_id INT REFERENCES campaigns(id),
+            character_id INT REFERENCES characters(id)
+        )
     `)
 }
-
 
 module.exports = {
     client,
     createTables,
     ...require('./characters'),
     ...require('./dms'),
-    ...require('./campaigns')
+    ...require('./campaigns'),
+    ...require('./campaignsCharacters')
 }
 
