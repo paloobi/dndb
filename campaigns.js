@@ -36,6 +36,9 @@ const getCampaignById = async (client, id) => {
     return campaign;
 }
 
+//TODO: Add getCampaignWithDetails adapter. This would be campaign + characters + DM.
+
+
 const getCharactersByCampaignId = async (client, campaignId) => {
     const {rows: characters} = await client.query(`
         SELECT 

@@ -37,6 +37,8 @@ const getCharacterById = async (client, id) => {
     return character;
 }
 
+//TODO: Add getCharacterWithCampaign adapter
+
 const getCampaignsByCharacterId = async (client, characterId) => {
     const {rows: campaigns} = await client.query(`
         SELECT campaigns.* 
