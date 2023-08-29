@@ -67,10 +67,6 @@ const deleteCharacterById = async (id) => {
     return character;
 }
 
-
-//TODO: updateCharacterById
-// TODO: deleteCharacterById
-
 module.exports = {
     client,
     createTables,
