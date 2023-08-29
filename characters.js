@@ -8,7 +8,6 @@ const createCharacter = async (client, characterName, race, className) => {
         RETURNING *;
     `, [characterName, race, className]
     )
-    console.log("index.js log", characters);
     return characters;
 }
 
@@ -33,8 +32,8 @@ const getCharacterById = async (client, id) => {
     const {rows:[character]} = await client.query(`
         SELECT name, race, class
         FROM characters
-        WHERE id = ${id};
-    `) 
+        WHERE id = $1;
+    `, [id]) 
     return character;
 }
 
