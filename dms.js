@@ -1,5 +1,5 @@
 const createDm = async (client, name, starRating) => {
-    const {rows: dms} = await client.query(`
+    const {rows: [dm]} = await client.query(`
         INSERT INTO dms(
             name,
             star_rating
@@ -7,7 +7,7 @@ const createDm = async (client, name, starRating) => {
         RETURNING *;
     `, [name, starRating]
     )
-    return dms;
+    return dm;
 }
 
 const updateDmById = async (client, id, name, starRating) => {

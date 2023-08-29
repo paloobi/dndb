@@ -1,5 +1,5 @@
 const createCharacter = async (client, characterName, race, className) => {
-    const {rows: characters} = await client.query(`
+    const {rows: [character]} = await client.query(`
         INSERT INTO characters(
             name,
             race,
@@ -8,7 +8,7 @@ const createCharacter = async (client, characterName, race, className) => {
         RETURNING *;
     `, [characterName, race, className]
     )
-    return characters;
+    return character;
 }
 
 const updateCharacterById = async (client, id, characterName, race, className) => {

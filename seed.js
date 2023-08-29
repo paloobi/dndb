@@ -10,7 +10,12 @@ const {
     getAllDms,
     getDmById,
     updateDmById, 
-    deleteDmById 
+    deleteDmById,
+    createCampaign,
+    getAllCampaigns,
+    getCampaignById,
+    updateCampaignById,
+    deleteCampaignById 
 } = require(".");
 
 const seedDB = async () => {
@@ -50,13 +55,33 @@ const seedDB = async () => {
     const dmsAgain = await getAllDms(client);
     console.log(dmsAgain);
     const alsoBillyBob = await getDmById(client, 1);
-    console.log("got character: ", alsoBillyBob);
+    console.log("got dm: ", alsoBillyBob);
     const updatedBillyBob = await updateDmById(client, 1, "Billy Bob", 3);
     console.log("updated Billy Bob to: ", updatedBillyBob);
     await deleteDmById(client, 1);
     console.log("successfully deleted");
     const finalDms = await getAllDms(client);
     console.log(finalDms);
+
+    // *** SEED CAMPAIGNS ***
+    console.log("create campaigns");
+    const campaigns = await getAllCampaigns(client);
+    console.log(campaigns);
+    console.log("Samantha.id is: ", samantha.id);
+    const bridgeToNowhere = await createCampaign(client, "The Bridge to Nowhere", samantha.id);
+    console.log("created ", bridgeToNowhere);    
+    const dungeonWithStuff = await createCampaign(client, "A Dungeon with Stuff", samantha.id);
+    console.log("created ", dungeonWithStuff);
+    const campaignsAgain = await getAllCampaigns(client);
+    console.log(campaignsAgain);
+    const alsoBridgeToNowhere = await getCampaignById(client, 1);
+    console.log("got campaign: ", alsoBridgeToNowhere);
+    const bridgeToSomewhere = await updateCampaignById(client, 1, "The Bridge to Somewhere", samantha.id);
+    console.log("updated Bridge to Nowhere to: ", bridgeToSomewhere);
+    await deleteCampaignById(client, 1);
+    console.log("successfully deleted");
+    const finalCampaigns = await getAllCampaigns(client);
+    console.log(finalCampaigns);
 
     // *** END ***
     console.log("finished seeding db");

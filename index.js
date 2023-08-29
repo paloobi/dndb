@@ -8,12 +8,10 @@ client.on("error", (error) => {
 })
 
 
-//TODO: Create DM table 
-//TODO: Create Campaigns table 
-
 const createTables = async (client) => {
     await client.query(`
         DROP TABLE IF EXISTS characters;
+        DROP TABLE IF EXISTS campaigns;
         DROP TABLE IF EXISTS dms;    
     `)
     await client.query(`
@@ -28,6 +26,11 @@ const createTables = async (client) => {
             name VARCHAR(80) NOT NULL,
             star_rating INT NOT NULL CHECK(star_rating BETWEEN 0 AND 5)
             );
+        CREATE TABLE campaigns(
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(80) NOT NULL,
+            dm_id INT REFERENCES dms(id)
+            );
     `)
 }
 
@@ -36,6 +39,7 @@ module.exports = {
     client,
     createTables,
     ...require('./characters'),
-    ...require('./dms')
+    ...require('./dms'),
+    ...require('./campaigns')
 }
 
