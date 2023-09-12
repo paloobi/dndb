@@ -1,5 +1,5 @@
 const http = require('http');
-const { getAllCharacters } = require('./db/models');
+const { getAllCharacters, getCharacterById } = require('./db/models');
 const {client} = require('./db')
 
 const PORT = process.env.PORT || 5000;
@@ -21,7 +21,19 @@ const server = http.createServer(async (req, res) => {
                 res.end();
             }
         } else if (req.url.match(/\/api\/characters\/([0-9]+)/)) {
-
+            const id = req.url.split('/')[3];
+            try {
+                console.log(id);
+                const character = await getCharacterById(client, id);
+                res.writeHead(200, {"Content-Type": "application/json"});
+                res.write(JSON.stringify(character));
+                res.end();
+            } catch (e) {
+                console.error(e);
+                res.writeHead(500, {"Content-Type": "application/json"});
+                res.write(JSON.stringify({message: "Failed to get character with id " + id}));
+                res.end();
+            }
         }
         
         else {
