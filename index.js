@@ -1,14 +1,30 @@
 const http = require('http');
-const { getAllCharacters, getCharacterById } = require('./db/models');
+const { getAllCharacters, getCharacterById, createCharacter } = require('./db/models');
 const {client} = require('./db')
 
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '127.0.0.1'
 
+const getReqData = (req) => {
+    return new Promise((resolve, reject) => {
+        try {
+            let body = '';
+            req.on('data', (chunk) => {
+                body+= chunk.toString();
+            })
+            req.on('end', () => {
+                resolve(body);
+            });
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 const server = http.createServer(async (req, res) => {
     console.log('Request received for ' + req.url);
     if (req.url.startsWith('/api')) {
-        if (req.url === '/api/characters') {
+        if (req.url === '/api/characters' && req.method === 'GET') {
             try {
                 const characters = await getAllCharacters(client);
                 res.writeHead(200, {"Content-Type": "application/json"});
@@ -34,13 +50,27 @@ const server = http.createServer(async (req, res) => {
                 res.write(JSON.stringify({message: "Failed to get character with id " + id}));
                 res.end();
             }
+        } else if (req.url === '/api/characters' && req.method === 'POST') {
+            try {
+                const data = await getReqData(req);
+                const character = await createCharacter(client, ...Object.values(JSON.parse(data)));
+
+                res.writeHead(200, {"Content-Type": "application/json"});
+                res.write(JSON.stringify(character));
+                res.end();
+            } catch (e) {
+                console.error(e);
+                res.writeHead(500, {"Content-Type": "application/json"});
+                res.write(JSON.stringify({message: "Failed to create character"}));
+                res.end();
+            }
         }
         
         else {
             res.writeHead(404, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({message: 'API endpoint not found'}));
         }
-    } else {
+    } else { // Where to return index.html 
         res.writeHead(200, {'Content-Type': 'text/plain'});
         res.write('Server is running');
         res.end();
