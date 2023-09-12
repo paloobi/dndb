@@ -43,9 +43,6 @@ const createTables = async (client) => {
 module.exports = {
     client,
     createTables,
-    ...require('./characters'),
-    ...require('./dms'),
-    ...require('./campaigns'),
-    ...require('./campaignsCharacters')
+    ...require('./models'),
 }
 
