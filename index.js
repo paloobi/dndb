@@ -9,11 +9,20 @@ const server = http.createServer(async (req, res) => {
     console.log('Request received for ' + req.url);
     if (req.url.startsWith('/api')) {
         if (req.url === '/api/characters') {
-            const characters = await getAllCharacters(client);
-            res.writeHead(200, {"Content-Type": "application/json"});
-            res.write(JSON.stringify(characters));
-            res.end();
-        } 
+            try {
+                const characters = await getAllCharacters(client);
+                res.writeHead(200, {"Content-Type": "application/json"});
+                res.write(JSON.stringify(characters));
+                res.end();
+            } catch (e) {
+                console.error(e);
+                res.writeHead(500, {"Content-Type": "application/json"});
+                res.write(JSON.stringify({message: "Failed to get all character"}));
+                res.end();
+            }
+        } else if (req.url.match(/\/api\/characters\/([0-9]+)/)) {
+
+        }
         
         else {
             res.writeHead(404, {'Content-Type': 'application/json'});
