@@ -1,5 +1,7 @@
-const createCharacter = async (client, characterName, race, className) => {
-    const {rows: [character]} = await client.query(`
+const {pool} = require('../pool');
+
+const createCharacter = async (characterName, race, className) => {
+    const {rows: [character]} = await pool.query(`
         INSERT INTO characters(
             name,
             race,
@@ -11,8 +13,8 @@ const createCharacter = async (client, characterName, race, className) => {
     return character;
 }
 
-const updateCharacterById = async (client, id, characterName, race, className) => {
-    const {rows: [character]} = await client.query(`
+const updateCharacterById = async (id, characterName, race, className) => {
+    const {rows: [character]} = await pool.query(`
         UPDATE characters
         SET name = $1, race = $2, class = $3
         WHERE id = $4
@@ -21,15 +23,15 @@ const updateCharacterById = async (client, id, characterName, race, className) =
     return character;
 }
 
-const getAllCharacters = async (client) => {
-    const {rows: characters} = await client.query(`
+const getAllCharacters = async () => {
+    const {rows: characters} = await pool.query(`
         SELECT * FROM characters;
     `)
     return characters;
 }
 
-const getCharacterById = async (client, id) => {
-    const {rows:[character]} = await client.query(`
+const getCharacterById = async (id) => {
+    const {rows:[character]} = await pool.query(`
         SELECT name, race, class
         FROM characters
         WHERE id = $1;
@@ -39,8 +41,8 @@ const getCharacterById = async (client, id) => {
 
 //TODO: Add getCharacterWithCampaign adapter
 
-const getCampaignsByCharacterId = async (client, characterId) => {
-    const {rows: campaigns} = await client.query(`
+const getCampaignsByCharacterId = async (characterId) => {
+    const {rows: campaigns} = await pool.query(`
         SELECT campaigns.* 
         FROM campaigns 
         JOIN campaigns_characters 
@@ -50,8 +52,8 @@ const getCampaignsByCharacterId = async (client, characterId) => {
     return campaigns;
 }
 
-const deleteCharacterById = async (client, id) => {
-    const {rows: [character]} = await client.query(`
+const deleteCharacterById = async (id) => {
+    const {rows: [character]} = await pool.query(`
         DELETE FROM characters
         WHERE id = $1;
     `, [id]);

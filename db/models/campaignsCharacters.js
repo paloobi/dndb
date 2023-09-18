@@ -1,5 +1,7 @@
-const addCharacterToCampaign = async (client, campaignId, characterId) => {
-    const {rows: [campaignCharacter]} = await client.query(`
+const {pool} = require('../pool');
+
+const addCharacterToCampaign = async (campaignId, characterId) => {
+    const {rows: [campaignCharacter]} = await pool.query(`
         INSERT INTO campaigns_characters(
             campaign_id,
             character_id
@@ -10,8 +12,8 @@ const addCharacterToCampaign = async (client, campaignId, characterId) => {
     return campaignCharacter;
 }
 
-const removeCharacterFromCampaign = async (client, campaignId, characterId) => {
-    await client.query(`
+const removeCharacterFromCampaign = async (campaignId, characterId) => {
+    await pool.query(`
         DELETE FROM campaigns_characters
         WHERE campaign_id = $1 AND character_id = $2;
     `, [campaignId, characterId]);

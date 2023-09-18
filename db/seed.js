@@ -1,5 +1,5 @@
 const {
-    client,
+    pool,
     createTables,
     createCharacter,
     getAllCharacters,
@@ -26,98 +26,98 @@ const seedDB = async () => {
     // *** BEGIN ***
     console.log("begin seeding db");
     console.log("creating tables");
-    await createTables(client);
+    await createTables();
     console.log("successfully created tables");
 
     // *** SEED CHARACTERS ***
     console.log("create characters");
-    const characters = await getAllCharacters(client);
+    const characters = await getAllCharacters();
     console.log(characters);
-    const joe = await createCharacter(client, "joe", "elf", "paladin");
+    const joe = await createCharacter("joe", "elf", "paladin");
     console.log("created ", joe);    
-    const bo = await createCharacter(client, "bo", "orc", "paladin");
+    const bo = await createCharacter("bo", "orc", "paladin");
     console.log("created ", bo);
-    const flo = await createCharacter(client, "flo", "human", "rogue");
+    const flo = await createCharacter("flo", "human", "rogue");
     console.log("created ", flo);
-    const charactersAgain = await getAllCharacters(client);
+    const charactersAgain = await getAllCharacters();
     console.log(charactersAgain);
-    const alsoJoe = await getCharacterById(client, 1);
+    const alsoJoe = await getCharacterById(1);
     console.log("got character: ", alsoJoe);
-    const updatedJoe = await updateCharacterById(client, 1, "Bob", "half-orc", "bard");
+    const updatedJoe = await updateCharacterById(1, "Bob", "half-orc", "bard");
     console.log("updated Joe to: ", updatedJoe);
-    await deleteCharacterById(client, 1);
+    await deleteCharacterById(1);
     console.log("successfully deleted");
-    const finalCharacters = await getAllCharacters(client);
+    const finalCharacters = await getAllCharacters();
     console.log(finalCharacters);
 
     // *** SEED DMS ***
     console.log("create dms");
-    const dms = await getAllDms(client);
+    const dms = await getAllDms();
     console.log(dms);
-    const billyBob = await createDm(client, "Billy Bob", 5);
+    const billyBob = await createDm("Billy Bob", 5);
     console.log("created ", billyBob);    
-    const samantha = await createDm(client, "Samantha", 4);
+    const samantha = await createDm("Samantha", 4);
     console.log("created ", samantha);
-    const dmsAgain = await getAllDms(client);
+    const dmsAgain = await getAllDms();
     console.log(dmsAgain);
-    const alsoBillyBob = await getDmById(client, 1);
+    const alsoBillyBob = await getDmById(1);
     console.log("got dm: ", alsoBillyBob);
-    const updatedBillyBob = await updateDmById(client, 1, "Billy Bob", 3);
+    const updatedBillyBob = await updateDmById(1, "Billy Bob", 3);
     console.log("updated Billy Bob to: ", updatedBillyBob);
-    await deleteDmById(client, 1);
+    await deleteDmById(1);
     console.log("successfully deleted");
-    const finalDms = await getAllDms(client);
+    const finalDms = await getAllDms();
     console.log(finalDms);
 
     // *** SEED CAMPAIGNS ***
     console.log("create campaigns");
-    const campaigns = await getAllCampaigns(client);
+    const campaigns = await getAllCampaigns();
     console.log(campaigns);
     console.log("Samantha.id is: ", samantha.id);
-    const bridgeToNowhere = await createCampaign(client, "The Bridge to Nowhere", samantha.id);
+    const bridgeToNowhere = await createCampaign("The Bridge to Nowhere", samantha.id);
     console.log("created ", bridgeToNowhere);    
-    const dungeonWithStuff = await createCampaign(client, "A Dungeon with Stuff", samantha.id);
+    const dungeonWithStuff = await createCampaign("A Dungeon with Stuff", samantha.id);
     console.log("created ", dungeonWithStuff);
-    const castleWithLoot = await createCampaign(client, "Castle with Loot", samantha.id);
+    const castleWithLoot = await createCampaign("Castle with Loot", samantha.id);
     console.log("created ", dungeonWithStuff);
-    const campaignsAgain = await getAllCampaigns(client);
+    const campaignsAgain = await getAllCampaigns();
     console.log(campaignsAgain);
-    const alsoBridgeToNowhere = await getCampaignById(client, 1);
+    const alsoBridgeToNowhere = await getCampaignById(1);
     console.log("got campaign: ", alsoBridgeToNowhere);
-    const bridgeToSomewhere = await updateCampaignById(client, 1, "The Bridge to Somewhere", samantha.id);
+    const bridgeToSomewhere = await updateCampaignById(1, "The Bridge to Somewhere", samantha.id);
     console.log("updated Bridge to Nowhere to: ", bridgeToSomewhere);
-    await deleteCampaignById(client, 1);
+    await deleteCampaignById(1);
     console.log("successfully deleted");
-    const finalCampaigns = await getAllCampaigns(client);
+    const finalCampaigns = await getAllCampaigns();
     console.log(finalCampaigns);
 
     // *** ADD CHARACTERS TO CAMPAIGN ***
-    await addCharacterToCampaign(client, dungeonWithStuff.id, bo.id);
-    await addCharacterToCampaign(client, castleWithLoot.id, bo.id);
-    await addCharacterToCampaign(client, castleWithLoot.id, flo.id);
+    await addCharacterToCampaign(dungeonWithStuff.id, bo.id);
+    await addCharacterToCampaign(castleWithLoot.id, bo.id);
+    await addCharacterToCampaign(castleWithLoot.id, flo.id);
 
-    const bosCampaigns = await getCampaignsByCharacterId(client, bo.id);
+    const bosCampaigns = await getCampaignsByCharacterId(bo.id);
     console.log("bosCampaigns: ", bosCampaigns);
-    const castleWithLootCharacters = await getCharactersByCampaignId(client, castleWithLoot.id);
+    const castleWithLootCharacters = await getCharactersByCampaignId(castleWithLoot.id);
     console.log("castleWithLootCharacters", castleWithLootCharacters);
 
-    await removeCharacterFromCampaign(client, castleWithLoot.id, flo.id);
+    await removeCharacterFromCampaign(castleWithLoot.id, flo.id);
 
-    const castleWithLootCharactersUpdated = await getCharactersByCampaignId(client, castleWithLoot.id);
+    const castleWithLootCharactersUpdated = await getCharactersByCampaignId(castleWithLoot.id);
     console.log("castleWithLootCharactersUpdate", castleWithLootCharactersUpdated);
 
     // *** END ***
     console.log("finished seeding db");
+    return pool;
 }
 
-client.connect()
+pool.connect()
     .then(() => {
         console.log("connected");
 
         return seedDB();
     })
-    .then(() => {
-        return client.end();
+    .then((pool) => {
+        process.exit();
     })
-    .then(() => console.log("connection closed"))
     .catch((error) => console.error(error));

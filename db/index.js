@@ -1,21 +1,13 @@
-const {Client} = require("pg");
+const {pool} = require('./pool');
 
-//TODO: Check for / create top level database
-
-const client = new Client("postgres://localhost:5432/dndb_dev");
-client.on("error", (error) => {
-    console.error(error.stack())
-})
-
-
-const createTables = async (client) => {
-    await client.query(`
+const createTables = async () => {
+    await pool.query(`
         DROP TABLE IF EXISTS campaigns_characters;
         DROP TABLE IF EXISTS characters;
         DROP TABLE IF EXISTS campaigns;
         DROP TABLE IF EXISTS dms;    
     `)
-    await client.query(`
+    await pool.query(`
         CREATE TABLE characters(
             id SERIAL PRIMARY KEY,
             name VARCHAR(80) NOT NULL,
@@ -41,8 +33,7 @@ const createTables = async (client) => {
 }
 
 module.exports = {
-    client,
+    pool,
     createTables,
     ...require('./models'),
 }
-
