@@ -1,5 +1,7 @@
-const createCampaign = async (client, name, dmId) => {
-    const {rows: [campaign]} = await client.query(`
+const {pool} = require('../pool');
+
+const createCampaign = async (name, dmId) => {
+    const {rows: [campaign]} = await pool.query(`
         INSERT INTO campaigns(
             name,
             dm_id
@@ -10,8 +12,8 @@ const createCampaign = async (client, name, dmId) => {
     return campaign;
 }
 
-const updateCampaignById = async (client, id, name, dmId) => {
-    const {rows: [campaign]} = await client.query(`
+const updateCampaignById = async (id, name, dmId) => {
+    const {rows: [campaign]} = await pool.query(`
         UPDATE campaigns
         SET name = $1, dm_id = $2
         WHERE id = $3
@@ -20,15 +22,15 @@ const updateCampaignById = async (client, id, name, dmId) => {
     return campaign;
 }
 
-const getAllCampaigns = async (client) => {
-    const {rows: campaigns} = await client.query(`
+const getAllCampaigns = async () => {
+    const {rows: campaigns} = await pool.query(`
         SELECT * FROM campaigns;
     `)
     return campaigns;
 }
 
-const getCampaignById = async (client, id) => {
-    const {rows:[campaign]} = await client.query(`
+const getCampaignById = async (id) => {
+    const {rows:[campaign]} = await pool.query(`
         SELECT name, dm_id
         FROM campaigns
         WHERE id = $1;
@@ -39,8 +41,8 @@ const getCampaignById = async (client, id) => {
 //TODO: Add getCampaignWithDetails adapter. This would be campaign + characters + DM.
 
 
-const getCharactersByCampaignId = async (client, campaignId) => {
-    const {rows: characters} = await client.query(`
+const getCharactersByCampaignId = async (campaignId) => {
+    const {rows: characters} = await pool.query(`
         SELECT 
             characters.id AS character_id, 
             characters.name AS character_name, 
@@ -54,8 +56,8 @@ const getCharactersByCampaignId = async (client, campaignId) => {
     return characters;
 }
 
-const deleteCampaignById = async (client, id) => {
-    const {rows: [campaign]} = await client.query(`
+const deleteCampaignById = async (id) => {
+    const {rows: [campaign]} = await pool.query(`
         DELETE FROM campaigns
         WHERE id = $1;
     `, [id]);

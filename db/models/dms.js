@@ -1,5 +1,7 @@
-const createDm = async (client, name, starRating) => {
-    const {rows: [dm]} = await client.query(`
+const {pool} = require('../pool');
+
+const createDm = async (name, starRating) => {
+    const {rows: [dm]} = await pool.query(`
         INSERT INTO dms(
             name,
             star_rating
@@ -10,8 +12,8 @@ const createDm = async (client, name, starRating) => {
     return dm;
 }
 
-const updateDmById = async (client, id, name, starRating) => {
-    const {rows: [dm]} = await client.query(`
+const updateDmById = async (id, name, starRating) => {
+    const {rows: [dm]} = await pool.query(`
         UPDATE dms
         SET name = $1, star_rating = $2
         WHERE id = $3
@@ -20,15 +22,15 @@ const updateDmById = async (client, id, name, starRating) => {
     return dm;
 }
 
-const getAllDms = async (client) => {
-    const {rows: dms} = await client.query(`
+const getAllDms = async () => {
+    const {rows: dms} = await pool.query(`
         SELECT * FROM dms;
     `)
     return dms;
 }
 
-const getDmById = async (client, id) => {
-    const {rows:[dm]} = await client.query(`
+const getDmById = async (id) => {
+    const {rows:[dm]} = await pool.query(`
         SELECT name, star_rating
         FROM dms
         WHERE id = $1;
@@ -36,8 +38,8 @@ const getDmById = async (client, id) => {
     return dm;
 }
 
-const deleteDmById = async (client, id) => {
-    const {rows: [dm]} = await client.query(`
+const deleteDmById = async (id) => {
+    const {rows: [dm]} = await pool.query(`
         DELETE FROM dms
         WHERE id = $1;
     `, [id]);

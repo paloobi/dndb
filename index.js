@@ -1,6 +1,6 @@
 const http = require('http');
 const { getAllCharacters, getCharacterById, createCharacter } = require('./db/models');
-const {client} = require('./db')
+const {pool} = require('./db')
 
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '127.0.0.1'
@@ -26,7 +26,7 @@ const server = http.createServer(async (req, res) => {
     if (req.url.startsWith('/api')) {
         if (req.url === '/api/characters' && req.method === 'GET') {
             try {
-                const characters = await getAllCharacters(client);
+                const characters = await getAllCharacters();
                 res.writeHead(200, {"Content-Type": "application/json"});
                 res.write(JSON.stringify(characters));
                 res.end();
@@ -40,7 +40,7 @@ const server = http.createServer(async (req, res) => {
             const id = req.url.split('/')[3];
             try {
                 console.log(id);
-                const character = await getCharacterById(client, id);
+                const character = await getCharacterById(id);
                 res.writeHead(200, {"Content-Type": "application/json"});
                 res.write(JSON.stringify(character));
                 res.end();
@@ -53,7 +53,7 @@ const server = http.createServer(async (req, res) => {
         } else if (req.url === '/api/characters' && req.method === 'POST') {
             try {
                 const data = await getReqData(req);
-                const character = await createCharacter(client, ...Object.values(JSON.parse(data)));
+                const character = await createCharacter(...Object.values(JSON.parse(data)));
 
                 res.writeHead(200, {"Content-Type": "application/json"});
                 res.write(JSON.stringify(character));
@@ -81,18 +81,18 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
     console.log(`Serving is listening on http://${HOST}:${PORT}`);
-    client.connect()
-    .then(() => {
-        console.log("connected to DB");
-    })
-    .catch((error) => console.error(error));
+    pool.connect()
+        .then(() => {
+            console.log("connected to DB");
+        })
+        .catch((error) => console.error(error));
 })
 
 server.on('close', () => {
     console.log("closing connection to DB");
-    client.end()
-    .then(() => {
-        console.log("successfully closed connection to DB");
-    })
+    pool.end()
+        .then(() => {
+            console.log("successfully closed connection to DB");
+        })
 })
 
