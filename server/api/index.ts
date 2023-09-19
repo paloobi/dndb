@@ -14,4 +14,9 @@ apiRouter.get("/", (req, res, next): void => {
 import charactersRouter from "./characters";
 apiRouter.use("/characters", charactersRouter)
 
+apiRouter.use((req, res): void => {
+    res.status(404)
+    .send({ message: "Invalid API endpoint" })
+})
+
 export default apiRouter;

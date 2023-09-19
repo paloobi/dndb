@@ -18,6 +18,10 @@ app.get("/", (req, res, next): void => {
 import apiRouter from "./api";
 app.use("/api", apiRouter)
 
+app.use((req, res): void => {
+    res.status(404)
+    .send({ message: "Invalid Route"})
+})
 
 const { PORT = 3000 } = process.env;
 

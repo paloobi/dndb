@@ -18,6 +18,10 @@ app.get("/", (req, res, next) => {
 });
 const api_1 = __importDefault(require("./api"));
 app.use("/api", api_1.default);
+app.use((req, res) => {
+    res.status(404)
+        .send({ message: "Invalid Route" });
+});
 const { PORT = 3000 } = process.env;
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);

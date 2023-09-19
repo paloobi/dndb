@@ -16,4 +16,8 @@ apiRouter.get("/", (req, res, next) => {
 });
 const characters_1 = __importDefault(require("./characters"));
 apiRouter.use("/characters", characters_1.default);
+apiRouter.use((req, res) => {
+    res.status(404)
+        .send({ message: "Invalid API endpoint" });
+});
 exports.default = apiRouter;
