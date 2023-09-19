@@ -27,6 +27,16 @@ charactersRouter.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // GET /api/characters/:id
+charactersRouter.get("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const character = yield (0, db_1.getCharacterById)(id);
+        res.send({ character });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 // POST /api/characters
 // PATCH /api/characters/:id
 // DELETE /api/characters/:id
