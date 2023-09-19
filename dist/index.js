@@ -22,6 +22,10 @@ app.use((req, res) => {
     res.status(404)
         .send({ message: "Invalid Route" });
 });
+app.use((error, req, res, next) => {
+    res.status(500)
+        .send({ message: "Oops! Server Error" });
+});
 const { PORT = 3000 } = process.env;
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
