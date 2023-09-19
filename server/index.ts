@@ -1,5 +1,6 @@
 import express from "express";
 
+
 const app = express();
 
 app.get("/", (req, res, next): void => {
@@ -9,6 +10,9 @@ app.get("/", (req, res, next): void => {
         next(error);
     }
 })
+
+import apiRouter from "./api";
+app.use("/api", apiRouter)
 
 const { PORT = 3000 } = process.env;
 
