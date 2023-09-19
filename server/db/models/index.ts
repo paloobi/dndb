@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 module.exports = {
     ...require('./characters'),
     ...require('./dms'),

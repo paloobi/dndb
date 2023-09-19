@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const {pool} = require('./pool');
 
 const createTables = async () => {

@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 const {pool} = require('../pool');
 
 const addCharacterToCampaign = async (campaignId, characterId) => {

@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 const {pool} = require('../pool');
 
 const createDm = async (name, starRating) => {
