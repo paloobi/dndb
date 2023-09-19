@@ -14,4 +14,6 @@ apiRouter.get("/", (req, res, next) => {
         next(error);
     }
 });
+const characters_1 = __importDefault(require("./characters"));
+apiRouter.use("/characters", characters_1.default);
 exports.default = apiRouter;

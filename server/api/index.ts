@@ -11,4 +11,7 @@ apiRouter.get("/", (req, res, next): void => {
     }
 })
 
+import charactersRouter from "./characters";
+apiRouter.use("/characters", charactersRouter)
+
 export default apiRouter;
