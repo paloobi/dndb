@@ -1,6 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerFile from './swagger_output.json';
+
 const app = express();
 
 app.use(morgan("dev"));
@@ -18,6 +21,8 @@ app.get("/", (req, res, next): void => {
 
 import apiRouter from "./api";
 app.use("/api", apiRouter)
+
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 app.use((req, res): void => {
     res.status(404)
